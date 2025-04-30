@@ -1,11 +1,12 @@
 import Landing from "@/pages/Landing";
 import Blood from "@/pages/Landing/Blood";
 import Login from "@/pages/Login";
-import Registration from "@/pages/Registration";
+
 import { FC, useState, useRef, useEffect } from "react";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AlignJustify, X } from "lucide-react";
 import gsap from "gsap";
+import Registration from "@/pages/Registration";
 
 const Routing: FC = () => {
         const [showNav, setShowNav] = useState<boolean>(!false);
@@ -45,7 +46,7 @@ const Routing: FC = () => {
                         <header>
                                 <nav className="fixed z-10 bg-white w-full flex items-center justify-evenly md:justify-between px-6">
                                         <img src="logo.png" alt="logo" className="w-72" />
-                                        <Link to="/register">
+                                        <Link to="/registration">
                                                 <Blood override="!h-[40px]" />
                                         </Link>
                                 </nav>
@@ -60,7 +61,7 @@ const Routing: FC = () => {
                                 <nav className="fixed z-10 bg-white w-full md:flex items-center justify-evenly md:justify-between px-6 hidden">
                                         <img src="logo.png" alt="logo" className="w-72" />
                                         <Link to="/">Go Back Home</Link>
-                                        <Link to="/register">Register</Link>
+                                        <Link to="/registration">Register</Link>
                                         <Link to="/login">Login</Link>
                                 </nav>
 
@@ -85,7 +86,7 @@ const Routing: FC = () => {
                                         >
                                                 <div className=" flex flex-col gap-20 px-8 active:underline ">
                                                         <Link to="/">Go Back Home</Link>
-                                                        <Link to="/register">Register</Link>
+                                                        <Link to="/registration">Register</Link>
                                                         <Link to="/login">Login</Link>
                                                 </div>
 
@@ -99,7 +100,7 @@ const Routing: FC = () => {
                                 </nav>
 
                                 <Routes >
-                                        <Route path="/register" element={<Registration />} />
+                                        <Route path="/registration" element={<Registration/>} />
                                         <Route path="/login" element={<Login />} />
                                 </Routes>
                         </>

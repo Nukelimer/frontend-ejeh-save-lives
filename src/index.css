@@ -4,6 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+
+    --color-primary: #BE3D2A;
+	--color-text: #102E50;
+	--color-: hsl(49, 23%, 90%);
+	--color-tag: hsl(49, 22%, 88%);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -49,9 +54,10 @@
   --card-foreground: oklch(0.147 0.004 49.25);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.147 0.004 49.25);
-  --primary: oklch(0.216 0.006 56.043);
+  --primary: #BE3D2A;
   --primary-foreground: oklch(0.985 0.001 106.423);
-  --secondary: oklch(0.97 0.001 106.424);
+  --secondary: #102E50;
+
   --secondary-foreground: oklch(0.216 0.006 56.043);
   --muted: oklch(0.97 0.001 106.424);
   --muted-foreground: oklch(0.553 0.013 58.071);
@@ -116,5 +122,25 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer utilities {
+  .mx-spacing {
+    @apply mx-12; /* Directly applies Tailwind’s mx-12 */
+  }
+
+   .px-spacing {
+    @apply px-12; /* Directly applies Tailwind’s mx-12 */
+  }
+
+
+  .p_color{
+
+    @apply text-[#543310]
+  }
+
+  .pcolor{
+
+    @apply border-[#543310]
   }
 }

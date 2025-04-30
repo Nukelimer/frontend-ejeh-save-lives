@@ -123,7 +123,7 @@ const Landing: FC = () => {
                         </section>
 
                         {/* Features Section */}
-                        <section className="py-12 px-4 bg-gray-100 text-center">
+                        <section className="py-12 px-4 bg-[#F8F4E1]/20 text-center">
                                 <h2 className="text-3xl font-bold mb-8">
                                         Why Choose Ejeh Save Lives?
                                 </h2>
@@ -174,7 +174,7 @@ const Landing: FC = () => {
                                 </h2>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                         <Link
-                                                to="/register"
+                                                to="/registration"
                                                 className="px-6 py-3 bg-white text-blood-red rounded-md text-lg font-semibold hover:bg-light-red focus:outline-none focus:ring-2 focus:ring-white"
                                         >
                                                 Register
