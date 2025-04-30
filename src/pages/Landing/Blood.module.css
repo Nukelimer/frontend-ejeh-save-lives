@@ -1,0 +1,48 @@
+.bloodContainer {
+  position: relative;
+  width: 130px;
+  height: 100px;
+  /* left: 200px; */
+
+  overflow: hidden;
+}
+
+.bloodDrop {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: linear-gradient(to bottom, #ff0000, #cc0000);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: drip 2s infinite;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.bloodDrop:nth-child(1) { left: 20%; animation-delay: 0s; }
+.bloodDrop:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+.bloodDrop:nth-child(3) { left: 60%; animation-delay: 1s; }
+.bloodDrop:nth-child(4) { left: 80%; animation-delay: 1.5s; }
+
+@keyframes drip {
+  0% {
+    transform: translateY(-50px);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(150px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(200px);
+    opacity: 0;
+  }
+}
+
+.bloodPool {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: radial-gradient(circle, #cc0000, #ff0000);
+  border-radius: 8px;
+  opacity: 0.6;
+}
