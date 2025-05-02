@@ -6,7 +6,40 @@ import { Link } from "react-router-dom";
 type userState = "donor" | "hospital" | "collector";
 type LoginTypeProps = {
         userState: userState;
-        userSetFunction: React.Dispatch<React.SetStateAction<userState>>;
+        loginData: {
+                donorData: {
+                        donorEmail: string;
+                        donorPassword: string;
+                };
+                setDonorData: React.Dispatch<
+                        React.SetStateAction<{
+                                donorEmail: string;
+                                donorPassword: string;
+                        }>
+                >;
+
+                hospitalData: {
+                        hospitalEmail: string;
+                        hospitalPassword: string;
+                };
+                setHospitalData: React.Dispatch<
+                        React.SetStateAction<{
+                                hospitalEmail: string;
+                                hospitalPassword: string;
+                        }>
+                >;
+
+                collectorData: {
+                        collectorEmail: string;
+                        collectorPassword: string;
+                };
+                setCollectorData: React.Dispatch<
+                        React.SetStateAction<{
+                                collectorEmail: string;
+                                collectorPassword: string;
+                        }>
+                >;
+        };
 };
 
 function LoginType({ userState }: LoginTypeProps) {
@@ -17,7 +50,8 @@ function LoginType({ userState }: LoginTypeProps) {
                                         Login As Donor
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                                        <Input
+                            <Input
+                                name="donorEmail"
                                                 inputType="text"
                                                 placeholder="Enter Your Email Address"
                                                 labelName="Email"
@@ -26,7 +60,8 @@ function LoginType({ userState }: LoginTypeProps) {
                                                 parentStyles="mt-6 md:mt-0 l"
                                         />
 
-                                        <Input
+                            <Input
+                                name="donorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Your Password"
                                                 labelName="Password"
@@ -68,7 +103,8 @@ function LoginType({ userState }: LoginTypeProps) {
                                         Login As Hospital
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                                        <Input
+                            <Input
+                                name="donorHospital"
                                                 inputType="text"
                                                 placeholder="Enter Hospital Email Address"
                                                 labelName=" Hospital Email"
@@ -76,7 +112,8 @@ function LoginType({ userState }: LoginTypeProps) {
                                                 labelStyles="text-slate-400 "
                                                 parentStyles="mt-6 "
                                         />
-                                        <Input
+                            <Input
+                                name="donorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Password"
                                                 labelName="Hospital Password"
@@ -93,7 +130,7 @@ function LoginType({ userState }: LoginTypeProps) {
                                                 className=" w-1/4  py-6 text-white cursor-pointer"
                                         >
                                                 {" "}
-                                              Login
+                                                Login
                                         </Button>
                                 </div>
 
@@ -114,11 +151,12 @@ function LoginType({ userState }: LoginTypeProps) {
         else if (userState === "collector") {
                 return (
                         <div className=" ">
-                                <h3 className="mx-spacing text-2xl mb-6 p_color  uppercase">
+                                <h3 className="mx-spacing text-center text-2xl mb-6 p_color uppercase">
                                         Login As Collector
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                                        <Input
+                            <Input
+                                name="collectorEmail"
                                                 inputType="text"
                                                 placeholder="Enter Your Email Address"
                                                 labelName="Email"
@@ -126,7 +164,8 @@ function LoginType({ userState }: LoginTypeProps) {
                                                 labelStyles="text-slate-400 "
                                                 parentStyles="mt-6 "
                                         />
-                                        <Input
+                            <Input
+                                name="collectorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Your Password"
                                                 labelName="Password"
@@ -143,7 +182,7 @@ function LoginType({ userState }: LoginTypeProps) {
                                                 className=" w-1/4 py-6 text-white cursor-pointer"
                                         >
                                                 {" "}
-                                            Login
+                                                Login
                                         </Button>
                                 </div>
 

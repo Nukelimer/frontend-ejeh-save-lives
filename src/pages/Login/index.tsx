@@ -1,11 +1,63 @@
 import { useState } from "react";
 
 import { Hospital, Syringe, User } from "lucide-react";
-import RegisterType from "./LoginType";
+import LoginType from "./LoginType";
 
 function Login() {
         type UserState = "donor" | "hospital" | "collector";
         const [userLoginingType, setUserLoginingType] = useState<UserState>("donor");
+
+        const [donorData, setDonorData] = useState({
+                donorEmail: "",
+
+                donorPassword: ""
+        });
+        const [hospitalData, setHospitalData] = useState({
+                hospitalEmail: "",
+                hospitalPassword: ""
+        });
+        const [collectorData, setCollectorData] = useState({
+                collectorEmail: "",
+                collectorPassword: ""
+        });
+
+        const loginData = {
+                donorData,
+                setDonorData,
+                hospitalData,
+                setHospitalData,
+                collectorData,
+                setCollectorData
+        };
+
+      
+        const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+
+                if (userLoginingType === "donor") {
+                        const newDonorData = {
+                                donorEmail: formData.get("donorEmail") as string,
+                                donorPassword: formData.get("donorPassword") as string
+                        };
+                        setDonorData(newDonorData);
+                        console.log("Submitted Donor Data:", newDonorData);
+                } else if (userLoginingType === "hospital") {
+                        const newHospitalData = {
+                                hospitalEmail: formData.get("hospitalEmail") as string,
+                                hospitalPassword: formData.get("hospitalPassword") as string
+                        };
+                        setHospitalData(newHospitalData);
+                        console.log("Submitted Hospital Data:", newHospitalData);
+                } else if (userLoginingType === "collector") {
+                        const newCollectorData = {
+                                collectorEmail: formData.get("collectorEmail") as string,
+                                collectorPassword: formData.get("collectorPassword") as string
+                        };
+                        setCollectorData(newCollectorData);
+                        console.log("Submitted Collector Data:", newCollectorData);
+                }
+        };
 
         return (
                 <div className="md:pt- 24 pt-8  flex relative md:h-screen flex-col justify-center items-center  ">
@@ -14,7 +66,10 @@ function Login() {
                                 alt=""
                                 className="hidden md:block absolute w-full h-full object-cover max-w-full max-h-full"
                         />
-                        <form className="bg-white w-full md:py-14 md:z-10 py-6 pt-16  md:w-[80%]  max-w-2xl ">
+                        <form
+                                className="bg-white w-full md:py-14 md:z-10 py-6 pt-16  md:w-[80%]  max-w-2xl "
+                                onSubmit={handleSubmit}
+                        >
                                 {
                                         <div className=" border  rounded mb-6 h-12 mx-spacing flex justify-between box-border">
                                                 <span
@@ -54,10 +109,7 @@ function Login() {
                                                 </span>
                                         </div>
                                 }
-                                <RegisterType
-                                        userState={userLoginingType}
-                                        userSetFunction={setUserLoginingType}
-                                />{" "}
+                                <LoginType userState={userLoginingType} loginData={loginData} />{" "}
                         </form>
                 </div>
         );
