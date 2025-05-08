@@ -1,6 +1,7 @@
 import { FC } from "react";
 import Routing from "./routing/Routing";
 import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "./components/ui/sonner";
 const App: FC = () => {
         return (
                 <BrowserRouter
@@ -9,6 +10,7 @@ const App: FC = () => {
                                 v7_startTransition: true
                         }}
                 >
+                        <Toaster />
                         <Routing />
                 </BrowserRouter>
         );

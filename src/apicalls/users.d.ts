@@ -1,46 +1,48 @@
 // src/apicalls/users.d.ts
-export interface DonorData {
-        donorName: string;
-        donorEmail: string;
-        donorAddress: string;
-        donorPhone: string;
-        donorAge: string;
-        donorPassword: string;
-        userType?: string; // Optional, to indicate user type
-}
-
-export interface HospitalData {
-        hospitalName: string;
-        hospitalEmail: string;
-        hospitalAddress: string;
-        hospitalPhone: string;
-        hospitalPassword: string;
-        userType?: string;
-}
-
-export interface CollectorData {
-        collectorName: string;
-        collectorEmail: string;
-        collectorAddress: string;
-        collectorPhone: string;
-        collectorAge: string;
-        collectorPassword: string;
-        userType?: string;
-}
-
 export interface LoginData {
         email: string;
         password: string;
 }
 
+export interface DonorData {
+        name: string;
+        email: string;
+        phone: string;
+        password: string;
+        userType: "donor";
+}
+
+export interface HospitalData {
+        hospitalName: string;
+        email: string;
+        address: string;
+        phone: string;
+        password: string;
+        website: string;
+        userType: "hospital";
+}
+
+export interface CollectorData {
+        collectorName: string;
+        email: string;
+        phone: string;
+        password: string;
+        website: string;
+        userType: "collector";
+}
+
 export interface ApiResponse {
         success: boolean;
         message: string;
-        data?: unknown;
-        // data?: any; // Adjust based on your backend response (e.g., { userId, token })
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data?: any;
 }
 
-export const LoginUser: (payload: LoginData) => Promise<ApiResponse>;
-export const RegisterUser: (
-        payload: DonorData | HospitalData | CollectorData
-) => Promise<ApiResponse>;
+export const LoginUser: (payload: LoginData) => Promise<{ data: ApiResponse }>;
+export const RegisterUser = async (payload) => {
+        const response = await axiosInstance("post", "/api/users/registration", payload);
+        return response;
+};
+
+
+

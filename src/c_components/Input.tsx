@@ -1,78 +1,20 @@
-// interface InputProps {
-//         inputType:
-//                 | "text"
-//                 | "password"
-//                 | "email"
-//                 | "search"
-//                 | "tel"
-//                 | "url"
-//                 | "number"
-//                 | "range"
-//                 | "date"
-//                 | "time"
-//                 | "datetime-local"
-//                 | "month"
-//                 | "week"
-//                 | "checkbox"
-//                 | "radio"
-//                 | "file"
-//                 | "submit"
-//                 | "reset"
-//                 | "button"
-//                 | "image"
-//                 | "hidden"
-//                 | "textarea";
-//         placeholder?: string;
-//         labelName?: string;
-//         labelStyles?: string;
-//         id?: string;
-//         inputStyles?: string;
-//         parentStyles?: string;
-//         value: string;
-//         onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-// }
-
-// function Input({
-//         parentStyles,
-//         inputType,
-//         placeholder,
-//         labelName,
-//         id,
-//         inputStyles,
-//         labelStyles,
-//         value,
-//         onChange
-// }: InputProps) {
-//         return (
-//                 <div className={`flex flex-col gap-3 text-white ${parentStyles}`}>
-//                         {labelName && (
-//                                 <label className={labelStyles} htmlFor={id}>
-//                                         {labelName}
-//                                 </label>
-//                         )}
-//                         {inputType === "textarea" ? (
-//                                 <textarea
-//                                         // value={value}
-//                                         // name={name}
-//                                         id={id}
-//                                         placeholder={placeholder}
-//                                         className={`${inputStyles} min-h-16`}
-//                                 />
-//                         ) : (
-//                                 <input
-//                                         value={value}
-//                                         onChange={onChange}
-//                                         type={inputType}
-//                                         id={id}
-//                                         placeholder={placeholder}
-//                                         className={inputStyles}
-//                                 />
-//                         )}
-//                 </div>
-//         );
-// }
-
-// export default Input;
+type ErrorKeys =
+        | "donorEmail"
+        | "donorPassword"
+        | "donorName"
+        | "donorPhone"
+        | "hospitalEmail"
+        | "hospitalPassword"
+        | "hospitalName"
+        | "hospitalPhone"
+        | "hospitalAddress"
+        | "collectorEmail"
+        | "collectorPassword"
+        | "collectorName"
+        | "collectorPhone"
+        | "hospitalAddress"
+        | "hospitalWebsite"
+        | "collectorWebsite" | "collectorAddress";
 
 interface InputProps {
         inputType:
@@ -104,10 +46,16 @@ interface InputProps {
         id?: string;
         inputStyles?: string;
         parentStyles?: string;
-        name?: string;
+        name: ErrorKeys;
+        formError?: Partial<Record<ErrorKeys, boolean | string>>;
+        
+
         value?: string;
         onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
+
+
+
 
 function Input({
         parentStyles,
@@ -119,10 +67,11 @@ function Input({
         labelStyles,
         name,
         value,
-        onChange
+        onChange,
+        formError
 }: InputProps) {
         return (
-                <div className={`flex flex-col gap-3 text-white ${parentStyles}`}>
+                <div className={`flex flex-col gap-2 ${parentStyles}`}>
                         {labelName && (
                                 <label className={labelStyles} htmlFor={id}>
                                         {labelName}
@@ -133,8 +82,13 @@ function Input({
                                         name={name}
                                         id={id}
                                         placeholder={placeholder}
-                                        className={`${inputStyles} min-h-16`}
+                                        className={`${inputStyles} min-h-16 ${
+                                                formError?.[name]
+                                                        ? "!border-red-500 border !bg-red-100"
+                                                        : ""
+                                        }`}
                                         onChange={onChange}
+                                        value={value}
                                 />
                         ) : (
                                 <input
@@ -144,8 +98,22 @@ function Input({
                                         type={inputType}
                                         id={id}
                                         placeholder={placeholder}
-                                        className={inputStyles}
+                                        className={`${inputStyles} ${
+                                                formError?.[name]
+                                                        ? "!border-red-500 border-2 !bg-red-100"
+                                                        : ""
+                                        }`}
                                 />
+                        )}
+                        {formError?.[name] && (
+                                <span className="text-red-500 text-sm">
+                                        {name === "donorName" && "Name is required"}
+                                        {name === "donorEmail" && "Please enter a valid email"}
+                                        {name === "donorPassword" &&
+                                                "Password must be at least 6 characters with a special character"}
+                                        {name === "donorPhone" &&
+                                                "Phone number must be 10-11 digits"}
+                                </span>
                         )}
                 </div>
         );

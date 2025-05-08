@@ -11,7 +11,7 @@ export const axiosInstance = async (method, endpoint, payload) => {
         try {
                 const response = await instance({
                         method,
-                        url: endpoint,
+                        url: `http://localhost:5000${endpoint}`,
                         data: payload
                 });
 
@@ -21,3 +21,23 @@ export const axiosInstance = async (method, endpoint, payload) => {
                 throw error; // 🔁 Let the calling function handle the error
         }
 };
+
+// const BASE_URL = "http://localhost:5000";
+
+// export const axiosInstance = async (method, endpoint, payload) => {
+//   try {
+//     const response = await axios({
+//       method,
+//       url: `${BASE_URL}${endpoint}`,
+//       data: payload,
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     console.error("Axios error:", error.response?.data || error.message);
+//     throw error;
+//   }
+// };

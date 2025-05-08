@@ -1,34 +1,66 @@
 
 
+
 import { useState } from "react";
 import { Hospital, Syringe, User } from "lucide-react";
 import RegisterType from "./RegisterType";
-import { RegisterUser } from "../../apicalls/users";
+import { RegisterUser, DonorData, HospitalData, CollectorData } from "../../apicalls/users";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
+
+
 function Register() {
         type UserState = "donor" | "hospital" | "collector";
         const [userLoginingType, setUserLoginingType] = useState<UserState>("donor");
+
+        const [donorErrors, setDonorErrors] = useState({
+                donorEmail: false,
+                donorName: false,
+                donorPhone: false,
+                donorPassword: false
+        });
+
+        const [hospitalErrors, setHospitalErrors] = useState({
+                hospitalEmail: false,
+                hospitalName: false,
+                hospitalPhone: false,
+                hospitalPassword: false,
+                hospitalAddress: false,
+                hospitalWebsite: false
+        });
+
+        const [collectorErrors, setCollectorErrors] = useState({
+                collectorEmail: false,
+                collectorName: false,
+                collectorPhone: false,
+                collectorPassword: false,
+                collectorAddress: false,
+                collectorWebsite: false
+        });
+
         const [donorData, setDonorData] = useState({
                 donorName: "",
                 donorEmail: "",
-                donorAddress: "",
                 donorPhone: "",
-                donorAge: "",
                 donorPassword: ""
         });
+
         const [hospitalData, setHospitalData] = useState({
                 hospitalName: "",
                 hospitalEmail: "",
                 hospitalAddress: "",
                 hospitalPhone: "",
-                hospitalPassword: ""
+                hospitalPassword: "",
+                hospitalWebsite: ""
         });
+
         const [collectorData, setCollectorData] = useState({
                 collectorName: "",
                 collectorEmail: "",
-                collectorAddress: "",
                 collectorPhone: "",
-                collectorAge: "",
-                collectorPassword: ""
+                collectorPassword: "",
+                collectorWebsite: "",
+                collectorAddress: ""
         });
 
         const registrationData = {
@@ -42,116 +74,269 @@ function Register() {
 
         const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-
-                // try {
-                //     const response  = await RegisterUser()
-                // } catch (error) {
-
-                //     console.error(error?.message)
-
-                // }
-
-                //     if (userLoginingType === "donor") {
-                //             const newDonorData = {
-                //                     donorName: formData.get("donorName") as string,
-                //                     donorEmail: formData.get("donorEmail") as string,
-                //                     donorAddress: formData.get("donorAddress") as string,
-                //                     donorPhone: formData.get("donorPhone") as string,
-                //                     donorAge: formData.get("donorAge") as string,
-                //                     donorPassword: formData.get("donorPassword") as string
-                //             };
-                //             setDonorData(newDonorData);
-                //             console.log("Submitted Donor Data:", newDonorData);
-                //     } else if (userLoginingType === "hospital") {
-                //             const newHospitalData = {
-                //                     hospitalName: formData.get("hospitalName") as string,
-                //                     hospitalEmail: formData.get("hospitalEmail") as string,
-                //                     hospitalAddress: formData.get("hospitalAddress") as string,
-                //                     hospitalPhone: formData.get("hospitalPhone") as string,
-                //                     hospitalPassword: formData.get("hospitalPassword") as string
-                //             };
-                //             setHospitalData(newHospitalData);
-                //             console.log("Submitted Hospital Data:", newHospitalData);
-                //     } else if (userLoginingType === "collector") {
-                //             const newCollectorData = {
-                //                     collectorName: formData.get("collectorName") as string,
-                //                     collectorEmail: formData.get("collectorEmail") as string,
-                //                     collectorAddress: formData.get("collectorAddress") as string,
-                //                     collectorPhone: formData.get("collectorPhone") as string,
-                //                     collectorAge: formData.get("collectorAge") as string,
-                //                     collectorPassword: formData.get("collectorPassword") as string
-                //             };
-                //             setCollectorData(newCollectorData);
-                //             console.log("Submitted Collector Data:", newCollectorData);
-                //     }
 
                 try {
+                        let response;
+
                         if (userLoginingType === "donor") {
-                                const newDonorData = {
-                                        donorName: formData.get("donorName") as string,
-                                        donorEmail: formData.get("donorEmail") as string,
-                                        donorAddress: formData.get("donorAddress") as string,
-                                        donorPhone: formData.get("donorPhone") as string,
-                                        donorAge: formData.get("donorAge") as string,
-                                        donorPassword: formData.get("donorPassword") as string,
-                                        userType: "donor" // Add userType for backend
+                                const payload: DonorData = {
+                                        name: donorData.donorName,
+                                        email: donorData.donorEmail,
+                                        phone: donorData.donorPhone,
+                                        password: donorData.donorPassword,
+                                        userType: "donor"
                                 };
-                            const response = await RegisterUser(newDonorData);
-                            
-                            console.log(response);
-                            
-                                if (response.success) {
-                                        setDonorData(newDonorData);
-                                      
-                                } else {
-                                        throw new Error(response.message);
+
+                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                const errors = {
+                                        donorName: !payload.name.trim(),
+                                        donorEmail:
+                                                !payload.email.trim() ||
+                                                !emailRegex.test(payload.email),
+                                        donorPassword:
+                                                payload.password.length < 6 ||
+                                                !/[^A-Za-z0-9]/.test(payload.password),
+                                        donorPhone: !payload.phone.match(/^\d{10,11}$/)
+                                };
+
+                                setDonorErrors(errors);
+
+                                if (Object.values(errors).some((error) => error)) {
+                                        toast.error("Please correct the errors in the form.", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#ef4444",
+                                                        color: "#fff",
+                                                        border: "1px solid #dc2626"
+                                                }
+                                        });
+                                        return;
                                 }
-                                console.log("Donor Registration Response:", response);
-                                // TODO: Handle success (e.g., redirect to login, show success message)
+
+                                response = await RegisterUser(payload);
+
+                                if (response?.success) {
+                                        toast.success("You have been registered as a donor!", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                icon: "🎉",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#22c55e",
+                                                        color: "#fff",
+                                                        border: "1px solid #16a34a"
+                                                }
+                                        });
+
+                                        setDonorData({
+                                                donorName: "",
+                                                donorEmail: "",
+                                                donorPhone: "",
+                                                donorPassword: ""
+                                        });
+                                        setDonorErrors({
+                                                donorName: false,
+                                                donorEmail: false,
+                                                donorPhone: false,
+                                                donorPassword: false
+                                        });
+                                } else {
+                                        throw new Error(response?.message || "Registration failed");
+                                }
                         } else if (userLoginingType === "hospital") {
-                                const newHospitalData = {
-                                        hospitalName: formData.get("hospitalName") as string,
-                                        hospitalEmail: formData.get("hospitalEmail") as string,
-                                        hospitalAddress: formData.get("hospitalAddress") as string,
-                                        hospitalPhone: formData.get("hospitalPhone") as string,
-                                        hospitalPassword: formData.get(
-                                                "hospitalPassword"
-                                        ) as string,
+                                const payload: HospitalData = {
+                                        hospitalName: hospitalData.hospitalName,
+                                        email: hospitalData.hospitalEmail,
+                                        address: hospitalData.hospitalAddress,
+                                        phone: hospitalData.hospitalPhone,
+                                        password: hospitalData.hospitalPassword,
+                                        website: hospitalData.hospitalWebsite,
                                         userType: "hospital"
                                 };
-                                const response = await RegisterUser(newHospitalData);
-                                 if (response.success) {
-                                         setHospitalData(newHospitalData);
-                                 } else {
-                                         throw new Error(response.message);
-                                 }
-                                console.log("Hospital Registration Response:", response);
+
+                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                const websiteRegex = /^https?:\/\/.+/;
+                                const errors = {
+                                        hospitalName: !payload.hospitalName.trim(),
+                                        hospitalEmail:
+                                                !payload.email.trim() ||
+                                                !emailRegex.test(payload.email),
+                                        hospitalPassword:
+                                                payload.password.length < 6 ||
+                                                !/[^A-Za-z0-9]/.test(payload.password),
+                                        hospitalPhone: !payload.phone.match(/^\d{10,11}$/),
+                                        hospitalAddress:
+                                                !payload.address.trim() ||
+                                                payload.address.length < 10,
+                                        hospitalWebsite:
+                                                !payload.website.trim() ||
+                                                !websiteRegex.test(payload.website)
+                                };
+
+                                setHospitalErrors(errors);
+
+                                if (Object.values(errors).some((error) => error)) {
+                                        toast.error("Please correct the errors in the form.", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#ef4444",
+                                                        color: "#fff",
+                                                        border: "1px solid #dc2626"
+                                                }
+                                        });
+                                        return;
+                                }
+
+                                response = await RegisterUser(payload);
+
+                                if (response?.success) {
+                                        toast.success("You have been registered as a hospital!", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                icon: "🎉",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#22c55e",
+                                                        color: "#fff",
+                                                        border: "1px solid #16a34a"
+                                                }
+                                        });
+
+                                        setHospitalData({
+                                                hospitalName: "",
+                                                hospitalEmail: "",
+                                                hospitalAddress: "",
+                                                hospitalPhone: "",
+                                                hospitalPassword: "",
+                                                hospitalWebsite: ""
+                                        });
+                                        setHospitalErrors({
+                                                hospitalEmail: false,
+                                                hospitalName: false,
+                                                hospitalPhone: false,
+                                                hospitalPassword: false,
+                                                hospitalAddress: false,
+                                                hospitalWebsite: false
+                                        });
+                                } else {
+                                        throw new Error(response?.message || "Registration failed");
+                                }
                         } else if (userLoginingType === "collector") {
-                                const newCollectorData = {
-                                        collectorName: formData.get("collectorName") as string,
-                                        collectorEmail: formData.get("collectorEmail") as string,
-                                        collectorAddress: formData.get(
-                                                "collectorAddress"
-                                        ) as string,
-                                        collectorPhone: formData.get("collectorPhone") as string,
-                                        collectorAge: formData.get("collectorAge") as string,
-                                        collectorPassword: formData.get(
-                                                "collectorPassword"
-                                        ) as string,
+                                const payload: CollectorData = {
+                                        collectorName: collectorData.collectorName,
+                                        email: collectorData.collectorEmail,
+                                        phone: collectorData.collectorPhone,
+                                        password: collectorData.collectorPassword,
+                                        website: collectorData.collectorWebsite,
                                         userType: "collector"
                                 };
-                                const response = await RegisterUser(newCollectorData);
-                                 if (response.success) {
-                                         setCollectorData(newCollectorData);
-                                 } else {
-                                         throw new Error(response.message);
-                                 }
-                                console.log("Collector Registration Response:", response);
+
+                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                const websiteRegex = /^https?:\/\/.+/;
+                                const errors = {
+                                        collectorName: !payload.collectorName.trim(),
+                                        collectorEmail:
+                                                !payload.email.trim() ||
+                                                !emailRegex.test(payload.email),
+                                        collectorPassword:
+                                                payload.password.length < 6 ||
+                                                !/[^A-Za-z0-9]/.test(payload.password),
+                                        collectorPhone: !payload.phone.match(/^\d{10,11}$/),
+                                        collectorWebsite:
+                                                !payload.website.trim() ||
+                                                !websiteRegex.test(payload.website),
+                                        collectorAddress: false // Address is not required for collectors
+                                };
+
+                                setCollectorErrors(errors);
+
+                                if (Object.values(errors).some((error) => error)) {
+                                        toast.error("Please correct the errors in the form.", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#ef4444",
+                                                        color: "#fff",
+                                                        border: "1px solid #dc2626"
+                                                }
+                                        });
+                                        return;
+                                }
+
+                                response = await RegisterUser(payload);
+
+                                if (response?.success) {
+                                        toast.success("You have been registered as a collector!", {
+                                                duration: 3000,
+                                                position: "top-center",
+                                                icon: "🎉",
+                                                dismissible: true,
+                                                style: {
+                                                        background: "#22c55e",
+                                                        color: "#fff",
+                                                        border: "1px solid #16a34a"
+                                                }
+                                        });
+
+                                        setCollectorData({
+                                                collectorName: "",
+                                                collectorEmail: "",
+                                                collectorPhone: "",
+                                                collectorPassword: "",
+                                                collectorWebsite: "",
+                                                collectorAddress: ""
+                                        });
+                                        setCollectorErrors({
+                                                collectorEmail: false,
+                                                collectorName: false,
+                                                collectorPhone: false,
+                                                collectorPassword: false,
+                                                collectorAddress: false,
+                                                collectorWebsite: false
+                                        });
+                                } else {
+                                        throw new Error(response?.message || "Registration failed");
+                                }
                         }
-                } catch (error) {
-                        console.error("Registration Error:", error);
-                        // TODO: Show error to user (e.g., "Email already exists")
+                } catch (error: unknown) {
+                        console.error("Registration Error:", {
+                                message: (error as Error).message,
+                                response: error instanceof AxiosError ? error.response : undefined,
+                                data:
+                                        error instanceof AxiosError
+                                                ? error.response?.data
+                                                : undefined,
+                                status:
+                                        error instanceof AxiosError
+                                                ? error.response?.status
+                                                : undefined,
+                                code: error instanceof AxiosError ? error.code : undefined
+                        });
+
+                        const errorMessage =
+                                error instanceof AxiosError && error.response?.data?.message
+                                        ? error.response.data.message
+                                        : error instanceof AxiosError &&
+                                          error.code === "ERR_NETWORK"
+                                        ? "Cannot connect to server. Please ensure the server is running on port 5000."
+                                        : (error as Error).message ||
+                                          "An error occurred. Please try again.";
+
+                        toast.error(errorMessage, {
+                                duration: 3000,
+                                position: "top-center",
+                                dismissible: true,
+                                style: {
+                                        background: "#ef4444",
+                                        color: "#fff",
+                                        border: "1px solid #dc2626"
+                                }
+                        });
                 }
         };
 
@@ -198,6 +383,12 @@ function Register() {
                                 <RegisterType
                                         userState={userLoginingType}
                                         registrationData={registrationData}
+                                        donorErrors={donorErrors}
+                                        setDonorErrors={setDonorErrors}
+                                        hospitalErrors={hospitalErrors}
+                                        setHospitalErrors={setHospitalErrors}
+                                        setCollectorErrors={setCollectorErrors}
+                                        collectorErrors={collectorErrors}
                                 />
                         </form>
                 </div>
