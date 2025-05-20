@@ -100,7 +100,7 @@ function Input({
                                         placeholder={placeholder}
                                         className={`${inputStyles} ${
                                                 formError?.[name]
-                                                        ? "!border-red-500 border-2 !bg-red-100"
+                                                        ? "!border-red-500 border !bg-red-100"
                                                         : ""
                                         }`}
                                 />
@@ -108,11 +108,35 @@ function Input({
                         {formError?.[name] && (
                                 <span className="text-red-500 text-sm">
                                         {name === "donorName" && "Name is required"}
+                                        {name === "collectorName" && "Name is required"}
+
+                                        {name === "hospitalName" && "Name is required"}
                                         {name === "donorEmail" && "Please enter a valid email"}
+                                        {name === "collectorEmail" && "Please enter a valid email"}
+                                        {name === "hospitalEmail" && "Please enter a valid email"}
                                         {name === "donorPassword" &&
                                                 "Password must be at least 6 characters with a special character"}
+
+                                        {name === "collectorPassword" &&
+                                                "Password must be at least 6 characters with a special character"}
+                                        {name === "hospitalPassword" &&
+                                                "Password must be at least 6 characters with a special character"}
+                                        {name === "collectorPhone" &&
+                                                "Phone number must be 10-11 digits"}
                                         {name === "donorPhone" &&
                                                 "Phone number must be 10-11 digits"}
+                                        {name === "hospitalPhone" &&
+                                                "Phone number must be 10-11 digits"}
+                                        {name === "hospitalAddress" &&
+                                                "Your address is too short and not descriptive enough."}
+
+                                        {name === "collectorAddress" &&
+                                                "Your address is too short and not descriptive enough."}
+
+                                        {name === "hospitalWebsite" &&
+                                                `The website should have this: "https://" before your website, i.e, https://www.myhospital.com`}
+                                        {name === "collectorWebsite" &&
+                                                `The website should have this: "https://" before your website, i.e, https://www.myhospital.com`}
                                 </span>
                         )}
                 </div>

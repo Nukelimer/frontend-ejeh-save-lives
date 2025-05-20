@@ -23,6 +23,7 @@ export interface HospitalData {
 }
 
 export interface CollectorData {
+        address: string;
         collectorName: string;
         email: string;
         phone: string;
@@ -38,7 +39,12 @@ export interface ApiResponse {
         data?: any;
 }
 
-export const LoginUser: (payload: LoginData) => Promise<{ data: ApiResponse }>;
+export const LoginUser = async (payload) => { 
+    const response = await axiosInstance("post", "/api/users/login", payload)
+    return response
+
+
+};
 export const RegisterUser = async (payload) => {
         const response = await axiosInstance("post", "/api/users/registration", payload);
         return response;

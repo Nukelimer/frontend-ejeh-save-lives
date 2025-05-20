@@ -41,7 +41,15 @@ type LoginTypeProps = {
         };
 };
 
-function LoginType({ userState }: LoginTypeProps) {
+function LoginType({ userState, loginData }: LoginTypeProps) {
+        const {
+                collectorData,
+                donorData,
+                hospitalData,
+                setCollectorData,
+                setDonorData,
+                setHospitalData
+        } = loginData;
         if (userState === "donor") {
                 return (
                         <div className=" pb-16 ">
@@ -49,24 +57,41 @@ function LoginType({ userState }: LoginTypeProps) {
                                         Login As Donor
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                            <Input
-                                name="donorEmail"
+                                        <Input
                                                 inputType="text"
+                                                name="donorEmail"
                                                 placeholder="Enter Your Email Address"
                                                 labelName="Email"
                                                 inputStyles="bg-slate-100 text-black placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black  px-2 placeholder border-black"
+                                                value={donorData.donorEmail}
                                                 labelStyles="text-slate-400 "
                                                 parentStyles="mt-6 md:mt-0 l"
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+
+                                                        setDonorData((prev) => ({
+                                                                ...prev,
+                                                                donorEmail: value
+                                                        }));
+                                                }}
                                         />
 
-                            <Input
-                                name="donorPassword"
+                                        <Input
+                                                name="donorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Your Password"
                                                 labelName="Password"
                                                 inputStyles="bg-slate-100 text-black px-2 placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black border-black"
                                                 labelStyles="text-slate-400  "
                                                 parentStyles="  mt-8"
+                                                value={donorData.donorPassword}
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setDonorData((prev) => ({
+                                                                ...prev,
+                                                                donorPassword: value
+                                                        }));
+                                                }}
                                         />
                                 </div>
 
@@ -102,23 +127,39 @@ function LoginType({ userState }: LoginTypeProps) {
                                         Login As Hospital
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                            <Input
-                                name="donorHospital"
+                                        <Input
+                                                name="hospitalEmail"
                                                 inputType="text"
                                                 placeholder="Enter Hospital Email Address"
                                                 labelName=" Hospital Email"
                                                 inputStyles="bg-slate-100 text-black placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black  px-2 placeholder border-black"
                                                 labelStyles="text-slate-400 "
                                                 parentStyles="mt-6 "
+                                                value={hospitalData.hospitalEmail}
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setHospitalData((prev) => ({
+                                                                ...prev,
+                                                                hospitalEmail: value
+                                                        }));
+                                                }}
                                         />
-                            <Input
-                                name="donorPassword"
+                                        <Input
+                                                name="donorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Password"
                                                 labelName="Hospital Password"
                                                 inputStyles="bg-slate-100 text-black px-2 placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black border-black"
                                                 labelStyles="text-slate-400  "
-                                                parentStyles=" mt-6 "
+                                                parentStyles=" mt-6"
+                                                value={hospitalData.hospitalPassword}
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setHospitalData((prev) => ({
+                                                                ...prev,
+                                                                hospitalPassword: value
+                                                        }));
+                                                }}
                                         />
                                 </div>
 
@@ -154,23 +195,39 @@ function LoginType({ userState }: LoginTypeProps) {
                                         Login As Collector
                                 </h3>
                                 <div className=" md:f lex w-full px-spacing ">
-                            <Input
-                                name="collectorEmail"
+                                        <Input
+                                                name="collectorEmail"
                                                 inputType="text"
                                                 placeholder="Enter Your Email Address"
                                                 labelName="Email"
                                                 inputStyles="bg-slate-100 text-black placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black  px-2 placeholder border-black"
                                                 labelStyles="text-slate-400 "
                                                 parentStyles="mt-6 "
+                                                value={collectorData.collectorEmail}
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setCollectorData((prev) => ({
+                                                                ...prev,
+                                                                collectorEmail: value
+                                                        }));
+                                                }}
                                         />
-                            <Input
-                                name="collectorPassword"
+                                        <Input
+                                                name="collectorPassword"
                                                 inputType="password"
                                                 placeholder="Enter Your Password"
                                                 labelName="Password"
                                                 inputStyles="bg-slate-100 text-black px-2 placeholder:text-slate-400 py-4 placeholder:px -4 focus:font-mono outline-black border-black"
                                                 labelStyles="text-slate-400  "
                                                 parentStyles="  mt-6"
+                                                value={collectorData.collectorPassword}
+                                                onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setCollectorData((prev) => ({
+                                                                ...prev,
+                                                                collectorPassword: value
+                                                        }));
+                                                }}
                                         />
                                 </div>
 

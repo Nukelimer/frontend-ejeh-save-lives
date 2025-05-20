@@ -1,6 +1,3 @@
-
-
-
 import { useState } from "react";
 import { Hospital, Syringe, User } from "lucide-react";
 import RegisterType from "./RegisterType";
@@ -8,10 +5,9 @@ import { RegisterUser, DonorData, HospitalData, CollectorData } from "../../apic
 import { AxiosError } from "axios";
 import { toast } from "sonner";
 
-
 function Register() {
         type UserState = "donor" | "hospital" | "collector";
-        const [userLoginingType, setUserLoginingType] = useState<UserState>("donor");
+        const [userRegisteringType, setUserRegisteringType] = useState<UserState>("donor");
 
         const [donorErrors, setDonorErrors] = useState({
                 donorEmail: false,
@@ -51,7 +47,7 @@ function Register() {
                 hospitalAddress: "",
                 hospitalPhone: "",
                 hospitalPassword: "",
-                hospitalWebsite: ""
+                hospitalWebsite: "https://"
         });
 
         const [collectorData, setCollectorData] = useState({
@@ -59,7 +55,7 @@ function Register() {
                 collectorEmail: "",
                 collectorPhone: "",
                 collectorPassword: "",
-                collectorWebsite: "",
+                collectorWebsite: "https://",
                 collectorAddress: ""
         });
 
@@ -78,7 +74,7 @@ function Register() {
                 try {
                         let response;
 
-                        if (userLoginingType === "donor") {
+                        if (userRegisteringType === "donor") {
                                 const payload: DonorData = {
                                         name: donorData.donorName,
                                         email: donorData.donorEmail,
@@ -145,7 +141,7 @@ function Register() {
                                 } else {
                                         throw new Error(response?.message || "Registration failed");
                                 }
-                        } else if (userLoginingType === "hospital") {
+                        } else if (userRegisteringType === "hospital") {
                                 const payload: HospitalData = {
                                         hospitalName: hospitalData.hospitalName,
                                         email: hospitalData.hospitalEmail,
@@ -225,13 +221,14 @@ function Register() {
                                 } else {
                                         throw new Error(response?.message || "Registration failed");
                                 }
-                        } else if (userLoginingType === "collector") {
+                        } else if (userRegisteringType === "collector") {
                                 const payload: CollectorData = {
                                         collectorName: collectorData.collectorName,
                                         email: collectorData.collectorEmail,
                                         phone: collectorData.collectorPhone,
                                         password: collectorData.collectorPassword,
                                         website: collectorData.collectorWebsite,
+                                        address: collectorData.collectorAddress,
                                         userType: "collector"
                                 };
 
@@ -249,7 +246,8 @@ function Register() {
                                         collectorWebsite:
                                                 !payload.website.trim() ||
                                                 !websiteRegex.test(payload.website),
-                                        collectorAddress: false // Address is not required for collectors
+                                    collectorAddress: !payload.address.trim() ||
+                                                payload.address.length < 10,
                                 };
 
                                 setCollectorErrors(errors);
@@ -353,27 +351,27 @@ function Register() {
                         >
                                 <div className="border rounded mb-6 h-12 mx-spacing flex justify-between box-border">
                                         <span
-                                                onClick={() => setUserLoginingType("donor")}
+                                                onClick={() => setUserRegisteringType("donor")}
                                                 className={`border-t-8 border-white ${
-                                                        userLoginingType === "donor" &&
+                                                        userRegisteringType === "donor" &&
                                                         "!border-secondary font-bold"
                                                 } mx-auto w-full relative text-center cursor-pointer flex justify-center items-center pb-[8px]`}
                                         >
                                                 Donor <User className="ml-1" size={18} />
                                         </span>
                                         <span
-                                                onClick={() => setUserLoginingType("hospital")}
+                                                onClick={() => setUserRegisteringType("hospital")}
                                                 className={`border-t-8 border-white ${
-                                                        userLoginingType === "hospital" &&
+                                                        userRegisteringType === "hospital" &&
                                                         "!border-secondary font-bold"
                                                 } mx-auto w-full text-center cursor-pointer flex justify-center items-center pb-[8px]`}
                                         >
                                                 Hospital <Hospital className="ml-1" size={18} />
                                         </span>
                                         <span
-                                                onClick={() => setUserLoginingType("collector")}
+                                                onClick={() => setUserRegisteringType("collector")}
                                                 className={`border-t-8 border-white ${
-                                                        userLoginingType === "collector" &&
+                                                        userRegisteringType === "collector" &&
                                                         "!border-secondary font-bold"
                                                 } mx-auto w-full text-center cursor-pointer flex justify-center items-center pb-[8px]`}
                                         >
@@ -381,7 +379,7 @@ function Register() {
                                         </span>
                                 </div>
                                 <RegisterType
-                                        userState={userLoginingType}
+                                        userState={userRegisteringType}
                                         registrationData={registrationData}
                                         donorErrors={donorErrors}
                                         setDonorErrors={setDonorErrors}
