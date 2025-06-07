@@ -7,6 +7,8 @@ import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { AlignJustify, X } from "lucide-react";
 import gsap from "gsap";
 import Registration from "@/pages/Registration";
+import Welcome from "@/pages/Welcome";
+import ProtectedProutes from "@/c_components/ProtectedProutes";
 
 const Routing: FC = () => {
         const [showNav, setShowNav] = useState<boolean>(!false);
@@ -71,7 +73,6 @@ const Routing: FC = () => {
                                                 className=""
                                                 onClick={() => {
                                                         setShowNav(!showNav);
-                                                        console.log("o");
                                                 }}
                                         >
                                                 {showNav ? null : <AlignJustify />}
@@ -99,9 +100,17 @@ const Routing: FC = () => {
                                         </div>
                                 </nav>
 
-                                <Routes >
-                                        <Route path="/registration" element={<Registration/>} />
+                                <Routes>
+                                        <Route path="/registration" element={<Registration />} />
                                         <Route path="/login" element={<Login />} />
+                                        <Route
+                                                path="/welcome"
+                                                element={
+                                                        <ProtectedProutes>
+                                                                <Welcome />
+                                                        </ProtectedProutes>
+                                                }
+                                        />
                                 </Routes>
                         </>
                 );

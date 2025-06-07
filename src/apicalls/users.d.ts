@@ -51,4 +51,9 @@ export const RegisterUser = async (payload) => {
 };
 
 
+export const GetLoggedUserInformation = async () => {
+        const response = await axiosInstance("get", "/api/users/registration");
+        return response;
+};
+
 

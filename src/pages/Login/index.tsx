@@ -4,11 +4,12 @@ import { Hospital, Syringe, User } from "lucide-react";
 import LoginType from "./LoginType";
 import { toast } from "sonner";
 import { LoginData, LoginUser } from "@/apicalls/users";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
         type UserState = "donor" | "hospital" | "collector";
         const [userLoginingType, setUserLoginingType] = useState<UserState>("donor");
-
+        const navigate = useNavigate();
         const [donorData, setDonorData] = useState({
                 donorEmail: "",
 
@@ -32,20 +33,22 @@ function Login() {
                 setCollectorData
         };
 
-        const [donorErrors, setDonorErrors] = useState({
+        const [, setDonorErrors] = useState({
                 donorEmail: false,
                 donorPassword: false
         });
 
-        const [hospitalErrors, setHospitalErrors] = useState({
+        const [, setHospitalErrors] = useState({
                 hospitalEmail: false,
                 hospitalPassword: false
         });
 
-        const [collectorErrors, setCollectorErrors] = useState({
+        const [, setCollectorErrors] = useState({
                 collectorEmail: false,
                 collectorPassword: false
         });
+
+        // console.log(collectorErrors);
 
         const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 e.preventDefault();
@@ -59,7 +62,7 @@ function Login() {
                                         email: donorData.donorEmail,
                                         password: donorData.donorPassword
                                 };
-                                console.log("Hello");
+                                // console.log("Hello");
 
                                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -74,7 +77,7 @@ function Login() {
 
                                 setDonorErrors(errors);
 
-                                console.log(donorErrors);
+                                // console.log(donorErrors);
 
                                 if (Object.values(errors).some((error) => error)) {
                                         toast.error("Please correct the errors in the form.", {
@@ -90,11 +93,13 @@ function Login() {
                                         return;
                                 }
 
-                                console.log(payload);
+                                // console.log(payload);
 
                                 response = await LoginUser(payload);
 
                                 if (response?.success) {
+                                        localStorage.setItem("token", response.data);
+                                        navigate("/welcome");
                                         toast.success("Logging in as a donor successful!", {
                                                 duration: 3000,
                                                 position: "top-center",
@@ -117,7 +122,7 @@ function Login() {
                                                 donorPassword: false
                                         });
                                 } else {
-                                        console.log("before Error", response?.data.message);
+                                        // console.log("before Error", response?.data.message);
 
                                         throw new Error(response?.message || "Login failed");
                                 }
@@ -142,7 +147,7 @@ function Login() {
 
                                 setHospitalErrors(errors);
 
-                                console.log(hospitalErrors);
+                                // console.log(hospitalErrors);
 
                                 if (Object.values(errors).some((error) => error)) {
                                         toast.error("Please correct the errors in the form.", {
@@ -158,7 +163,7 @@ function Login() {
                                         return;
                                 }
 
-                                console.log(payload);
+                                // console.log(payload);
 
                                 response = await LoginUser(payload);
 
@@ -185,7 +190,7 @@ function Login() {
                                                 hospitalPassword: false
                                         });
                                 } else {
-                                        console.log("before Error", response?.data.message);
+                                        // console.log("before Error", response?.data.message);
 
                                         throw new Error(response?.message || "Registration failed");
                                 }
